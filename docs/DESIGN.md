@@ -62,6 +62,9 @@ surgical history. So the mapping is defined **at the item level** and any L1↔L
 relationship is derived from it. There is no hand-maintained correspondence
 table to drift.
 
+The files that hold this are documented column by column in
+[`../vocab/README.md`](../vocab/README.md).
+
 ```
 L3 Item ──(1:1)──→ L2 Modality      already in the dictionary
 L3 Item ──(m:n)──→ L1 Construct     vocab/gp2_L3_item_tags.csv

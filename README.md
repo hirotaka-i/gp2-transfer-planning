@@ -29,12 +29,10 @@ Click **Load an example cohort** in the sidebar to see either app populated.
 | `transfer_plan_stage2_app.py` | Stage 2. Seven screens. Contains `INSTRUMENT_GROUPS`, the only hand-maintained mapping in the project. |
 | `report.py` | PDF generation, shared by both apps. |
 | `check_vocab.py` | Compares the vocabulary against the GP2 Data Dictionary. Read-only. |
-| `vocab/*.csv` | The vocabulary. Edit these rather than the code — see below. |
+| `vocab/*.csv` | The vocabulary. Edit these rather than the code — [`vocab/README.md`](vocab/README.md) documents every column. |
 | `tests/test_smoke.py` | `pytest -q`. Run before and after every change. |
 | `docs/DESIGN.md` | Why the model looks like this. Read once before changing anything structural. |
 | `CLAUDE.md` | Context for Claude Code / Copilot, including the Streamlit traps. |
-| `previous_version/` | The pre-two-stage app, kept for reference only. Not wired to anything. |
-
 ---
 
 ## Changing things
@@ -42,7 +40,8 @@ Click **Load an example cohort** in the sidebar to see either app populated.
 **Most changes are CSV edits, not code.** Adding a clinical domain, changing
 which ones start ticked, rewording the examples a PI sees — all of that lives in
 `vocab/gp2_L1_constructs.csv`. Adding a biosample is one line in
-`vocab/gp2_biosamples.csv`.
+`vocab/gp2_biosamples.csv`. **[`vocab/README.md`](vocab/README.md) documents
+every file and column, and is the first thing to read before editing them.**
 
 **`INSTRUMENT_GROUPS` in `transfer_plan_stage2_app.py` is the exception.** It
 maps what a cohort sees ("MDS-UPDRS") to the dictionary modalities that carry it
