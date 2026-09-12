@@ -1,0 +1,72 @@
+l2_modality,n_items,primary_l1,note,requires_item_tags
+Rankin Scale,1,ADL,,0
+Schwab England ADL,1,ADL,,0
+Orthostatic hypotension,9,Autonomic,,0
+SCOPA-AUT,35,Autonomic,,0
+WBC counts,5,Blood tests,,0
+IDEA Screening Questionnaire,9,Cognition,dementia screening,0
+MMSE,38,Cognition,,0
+MoCA,43,Cognition,,0
+SCOPA-COG,11,Cognition,,0
+SDM,1,Cognition,,0
+DAT_imaging,10,DAT-SPECT,,0
+Epworth Sleepiness Scale,10,Daytime sleepiness,,0
+Demographics,4,Demographics,,0
+Geriatric Depression Scale: Short Form,16,Depression,,0
+Misc Depression Scale,3,Depression,,0
+Diagnosis,16,Diagnosis,,1
+MDS_Diagnostic_criteria,27,Diagnosis,,1
+Clinical diagnosis of complications,9,Disease course / complications,"presence only, no event time; cross-cutting",1
+PD History,20,Disease course / complications,event milestones with age_at_*; usable for survival analysis,1
+CBD-Armstrong,14,Disease-specific scales,CBD/CBS,0
+CBFS A,15,Disease-specific scales,CBD/CBS,1
+CBFS B,18,Disease-specific scales,CBD/CBS,1
+CBS-Armstrong,10,Disease-specific scales,CBD/CBS,0
+DLB,22,Disease-specific scales,DLB; cross-cutting,1
+MDS-MSA,34,Disease-specific scales,MSA,0
+MDS-PSP,32,Disease-specific scales,PSP,0
+PSP-CDS,8,Disease-specific scales,PSP,0
+PSP-RS,1,Disease-specific scales,PSP,0
+PSP-RS part I,8,Disease-specific scales,PSP,0
+PSP-RS part II,5,Disease-specific scales,PSP,0
+PSP-RS part III,3,Disease-specific scales,PSP,0
+PSP-RS part IV,5,Disease-specific scales,PSP,0
+PSP-RS part V,7,Disease-specific scales,PSP,0
+PSP-RS part VI,6,Disease-specific scales,PSP,0
+UMSARS part I,13,Disease-specific scales,MSA,0
+UMSARS part II,15,Disease-specific scales,MSA,0
+UMSARS part III,7,Disease-specific scales,MSA,0
+UMSARS part IV,1,Disease-specific scales,MSA,0
+Availability,20,EXCLUDE,already covered by the biosample matrix,0
+Base,8,EXCLUDE,"admin: participant_id, visit_month",0
+Family history,22,Family history,,0
+Known_relatedness,1,Family history,,0
+CISI-PD,4,Global severity (CISI-PD),,0
+QUIP-CS,13,Impulse control disorder,,0
+QUIP-RS,17,Impulse control disorder,,0
+Lifestyle,4,Lifestyle,,0
+MIBG_imaging,2,MIBG,,0
+MERQ-PD-B,21,MULTIPLE,exposure questionnaire: environment + lifestyle + head trauma + mood + surgical history,1
+Modified MERQ-PD,44,MULTIPLE,exposure questionnaire: occupation + lifestyle + head trauma + diabetes,1
+PD RFQ-U,13,MULTIPLE,exposure questionnaire: lifestyle + head trauma + anti-inflammatory use; no environment items,1
+Medical History,20,Medical history,,1
+Current Medication Status,17,Medication,,1
+Hoehn and Yahr,1,Motor staging (H&Y),,0
+Olfactory test,9,Olfaction,,0
+King's PD pain scale,35,Pain,,0
+Pathology,26,Pathology,cross-cutting,1
+PDQ-39,47,QOL,cross-cutting,1
+PDQ-8,1,QOL,,0
+RBD Diagnosis,1,RBD,,0
+RBD Screening Questionnaire,25,RBD,cross-cutting,1
+RBD Single-Question Screen,1,RBD,,0
+SAA Positivity,10,SAA,,0
+MDS-UPDRS Part I,18,UPDRS (MDS / original),cross-cutting,1
+MDS-UPDRS Part II,15,UPDRS (MDS / original),,0
+MDS-UPDRS Part III,40,UPDRS (MDS / original),,0
+MDS-UPDRS Part IV,10,UPDRS (MDS / original),,0
+UPDRS Part I,5,UPDRS (MDS / original),cross-cutting,1
+UPDRS Part II,14,UPDRS (MDS / original),,0
+UPDRS Part III,35,UPDRS (MDS / original),,0
+UPDRS Part IV,12,UPDRS (MDS / original),,0
+Vitals,6,Vital signs,,0

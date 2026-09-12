@@ -1,0 +1,355 @@
+item,l2_modality,primary_l1,extra_l1,strength,source,needs_review
+prodromal_rbd,Diagnosis,Diagnosis,RBD,secondary,auto+accepted,0
+prodromal_hyposmia,Diagnosis,Diagnosis,Olfaction,secondary,auto+accepted,0
+prodromal_confirmed,Diagnosis,Diagnosis,,,auto+accepted,0
+primary_diagnosis,Diagnosis,Diagnosis,,,auto+accepted,0
+primary_diagnosis_text,Diagnosis,Diagnosis,,,auto+accepted,0
+code_primary_diagnosis_confidence,Diagnosis,Diagnosis,,,auto+accepted,0
+last_diagnosis,Diagnosis,Diagnosis,,,auto+accepted,0
+path_diagnosis,Diagnosis,Diagnosis,,,auto+accepted,0
+visit_month_of_last_diagnosis,Diagnosis,Diagnosis,Mortality / vital status,secondary,auto+accepted,0
+diagnosis_change,Diagnosis,Diagnosis,,,auto+accepted,0
+visit_month_diagnosis_change,Diagnosis,Diagnosis,,,auto+accepted,0
+criteria_for_inclusion,Diagnosis,Diagnosis,,,auto+accepted,0
+code_last_diagnosis_confidence,Diagnosis,Diagnosis,,,auto+accepted,0
+handedness,Diagnosis,Diagnosis,,,auto+accepted,0
+dominant_side,Diagnosis,Diagnosis,,,auto+accepted,0
+dx_essential_bradykinesia,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_essential_rest_tremor,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_essential_rigidity,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_supportive_3_rest_tremor,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_exclusion_1_cerebellar_signs,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_exclusion_2_abnormal_eye_movement,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_exclusion_3_FTD_5y,MDS_Diagnostic_criteria,Diagnosis,Cognition,incidental,auto+accepted,0
+dx_exclusion_4_lower_limbs_only_3y,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_exclusion_7_cortical_signs,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_exclusion_8_negative_neuroimaging,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_exclusion_9_other_parkinsonism,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_redflag_01_gait_impairment_5y,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_redflag_02_progression_absent,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_redflag_03_severe_bulbar_dysfunction_5y,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_redflag_04_inspiratory_respiratory_dysfunction,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_redflag_05_severe_autonomic_failure_5y,MDS_Diagnostic_criteria,Diagnosis,Autonomic,incidental,auto+accepted,0
+dx_redflag_06_recurrent_falls_3y,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_redflag_07_dysproportionate_dystonia,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_redflag_09_unexplained_pyramidal_tract_signs,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_redflag_10_symmetric_parkinsonism,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+dx_criteria_application,MDS_Diagnostic_criteria,Diagnosis,,,auto+accepted,0
+age_at_first_motor_symptom,PD History,Disease course / complications,,,auto+accepted,0
+first_motor_symptom,PD History,Disease course / complications,,,auto+accepted,0
+living_status_at_censoring,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+age_at_living_status_censored,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+hy3_status_at_censoring,PD History,Disease course / complications,,,auto+accepted,0
+age_at_hy3_status_censored,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+dyskinesia_status_at_censoring,PD History,Disease course / complications,,,auto+accepted,0
+age_at_dyskinesia_status_censored,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+motor_fluctuation_status_at_censoring,PD History,Disease course / complications,,,auto+accepted,0
+age_at_motor_fluctuation_status_censored,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+levodopa_status_at_censoring,PD History,Disease course / complications,Medication,secondary,auto+accepted,0
+age_at_levodopa_status_censored,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+age_at_levodopa_status_censored,PD History,Disease course / complications,Medication,secondary,auto+accepted,0
+agonist_status_at_censoring,PD History,Disease course / complications,,,auto+accepted,0
+age_at_agonist_status_censored,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+pdmed_status_at_censoring,PD History,Disease course / complications,Medication,secondary,auto+accepted,0
+age_at_pdmed_status_censored,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+dementia_status_at_censoring,PD History,Disease course / complications,Cognition,secondary,auto+accepted,0
+age_at_dementia_status_censored,PD History,Disease course / complications,Cognition,secondary,auto+accepted,0
+age_at_dementia_status_censored,PD History,Disease course / complications,Mortality / vital status,secondary,auto+accepted,0
+age_brain_surgery,PD History,Disease course / complications,,,auto+accepted,0
+brain_surgery_type,PD History,Disease course / complications,,,auto+accepted,0
+hx_hyperlipidemia,Medical History,Medical history,,,auto+accepted,0
+hx_diabetes,Medical History,Medical history,,,auto+accepted,0
+hx_myocardinal_infarction,Medical History,Medical history,,,auto+accepted,0
+hx_congestive_heart_failure,Medical History,Medical history,,,auto+accepted,0
+hx_heart_disease,Medical History,Medical history,,,auto+accepted,0
+hx_dementia_mci,Medical History,Medical history,Cognition,secondary,auto+accepted,0
+hx_stroke,Medical History,Medical history,,,auto+accepted,0
+hx_melanoma,Medical History,Medical history,,,auto+accepted,0
+hx_cancer,Medical History,Medical history,,,auto+accepted,0
+hx_crohn,Medical History,Medical history,,,auto+accepted,0
+hx_autoimmune_disease,Medical History,Medical history,,,auto+accepted,0
+hx_depression,Medical History,Medical history,Depression,secondary,auto+accepted,0
+hx_schizophrenia,Medical History,Medical history,,,auto+accepted,0
+hx_bipolar,Medical History,Medical history,,,auto+accepted,0
+hx_restless_legs_syndrome,Medical History,Medical history,,,auto+accepted,0
+hx_head_trauma,Medical History,Medical history,Head trauma,secondary,auto+accepted,0
+hx_anxiety,Medical History,Medical history,Anxiety,secondary,auto+accepted,0
+hx_constipation,Medical History,Medical history,Autonomic,secondary,auto+accepted,0
+hx_sleep,Medical History,Medical history,Daytime sleepiness,secondary,auto+accepted,0
+clinical_dx_constipation,Clinical diagnosis of complications,Disease course / complications,Autonomic,secondary,auto+accepted,0
+clinical_dx_hyposmia,Clinical diagnosis of complications,Disease course / complications,Olfaction,secondary,auto+accepted,0
+clinical_dx_depression,Clinical diagnosis of complications,Disease course / complications,Depression,secondary,auto+accepted,0
+clinical_dx_mild_cognitive_impairment,Clinical diagnosis of complications,Disease course / complications,Cognition,secondary,auto+accepted,0
+clinical_dx_dementia,Clinical diagnosis of complications,Disease course / complications,Cognition,secondary,auto+accepted,0
+clinical_dx_daytime_sleep,Clinical diagnosis of complications,Disease course / complications,Daytime sleepiness,secondary,auto+accepted,0
+clinical_dx_dyskinesia,Clinical diagnosis of complications,Disease course / complications,,,auto+accepted,0
+clinical_dx_wearing_off,Clinical diagnosis of complications,Disease course / complications,,,auto+accepted,0
+medication_data_availability,Current Medication Status,Medication,,,auto+accepted,0
+levodopa_mg_daily,Current Medication Status,Medication,,,auto+accepted,0
+ledd_daily,Current Medication Status,Medication,,,auto+accepted,0
+levodopa_use,Current Medication Status,Medication,,,auto+accepted,0
+dopamine_agonist_use,Current Medication Status,Medication,,,auto+accepted,0
+anticholinergics_use,Current Medication Status,Medication,,,auto+accepted,0
+brain_surgery,Current Medication Status,Medication,Disease course / complications,secondary,auto+accepted,0
+cholin_esterase_inhibitor_use,Current Medication Status,Medication,,,auto+accepted,0
+anti_depressant_use,Current Medication Status,Medication,Depression,secondary,auto+accepted,0
+sleeping_pills_use,Current Medication Status,Medication,Daytime sleepiness,secondary,auto+accepted,0
+stomach_medicines_use,Current Medication Status,Medication,,,auto+accepted,0
+laxatives_use,Current Medication Status,Medication,,,auto+accepted,0
+NSAIDs_use,Current Medication Status,Medication,Lifestyle,secondary,auto+accepted,0
+morphines_use,Current Medication Status,Medication,,,auto+accepted,0
+anti_psychotics_use,Current Medication Status,Medication,,,auto+accepted,0
+insulin_use,Current Medication Status,Medication,,,auto+accepted,0
+hormone_replacement_therapy,Current Medication Status,Medication,,,auto+accepted,0
+mds_updrs_part_i_primary_info_source,MDS-UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+code_upd2101_cognitive_impairment,MDS-UPDRS Part I,UPDRS (MDS / original),Cognition,secondary,auto+accepted,0
+code_upd2102_hallucinations_and_psychosis,MDS-UPDRS Part I,UPDRS (MDS / original),Cognition,secondary,auto+accepted,0
+code_upd2103_depressed_mood,MDS-UPDRS Part I,UPDRS (MDS / original),Depression,secondary,auto+accepted,0
+code_upd2104_anxious_mood,MDS-UPDRS Part I,UPDRS (MDS / original),Anxiety,secondary,auto+accepted,0
+code_upd2105_apathy,MDS-UPDRS Part I,UPDRS (MDS / original),Depression,secondary,auto+accepted,0
+code_upd2106_dopamine_dysregulation_syndrome_features,MDS-UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+mds_updrs_part_i_sub_score,MDS-UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+mds_updrs_part_i_pat_quest_primary_info_source,MDS-UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+code_upd2108_pat_quest_daytime_sleepiness,MDS-UPDRS Part I,UPDRS (MDS / original),Daytime sleepiness,secondary,auto+accepted,0
+code_upd2109_pat_quest_pain_and_other_sensations,MDS-UPDRS Part I,UPDRS (MDS / original),Pain,secondary,auto+accepted,0
+code_upd2110_pat_quest_urinary_problems,MDS-UPDRS Part I,UPDRS (MDS / original),Autonomic,secondary,auto+accepted,0
+code_upd2111_pat_quest_constipation_problems,MDS-UPDRS Part I,UPDRS (MDS / original),Autonomic,secondary,auto+accepted,0
+code_upd2111_pat_quest_constipation_problems,MDS-UPDRS Part I,UPDRS (MDS / original),Disease course / complications,secondary,auto+accepted,0
+code_upd2112_pat_quest_lightheadedness_on_standing,MDS-UPDRS Part I,UPDRS (MDS / original),Autonomic,secondary,auto+accepted,0
+mds_updrs_part_i_pat_quest_sub_score,MDS-UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+mds_updrs_part_i_summary_score,MDS-UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+rbd_info_source,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd01_vivid_dreams,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd02_aggressive_or_action_packed_dreams,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd03_nocturnal_behaviour,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd05_hurt_bed_partner,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd06_1_speaking_in_sleep,RBD Screening Questionnaire,RBD,Daytime sleepiness,incidental,auto+accepted,0
+code_rbd06_2_sudden_limb_movements,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd06_3_complex_movements,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd06_4_things_fell_down,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd07_my_movements_awake_me,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd08_remember_dreams,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd09_sleep_is_disturbed,RBD Screening Questionnaire,RBD,Daytime sleepiness,incidental,auto+accepted,0
+code_rbd10a_stroke,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd10b_head_trauma,RBD Screening Questionnaire,RBD,Head trauma,incidental,auto+accepted,0
+code_rbd10c_parkinsonism,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd10d_rls,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd10e_narcolepsy,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd10f_depression,RBD Screening Questionnaire,RBD,Depression,incidental,auto+accepted,0
+code_rbd10g_epilepsy,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd10h_brain_inflammatory_disease,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd10i_other,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd10i_other_comment,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+code_rbd10_nervous_system_disease,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+rbd_summary_score,RBD Screening Questionnaire,RBD,,,auto+accepted,0
+pdq39_01_doing_leisure_activity,PDQ-39,QOL,,,auto+accepted,0
+pdq39_03_carrying_shopping_bags,PDQ-39,QOL,,,auto+accepted,0
+pdq39_04_walking_half_mile,PDQ-39,QOL,,,auto+accepted,0
+pdq39_05_walking_100_yards,PDQ-39,QOL,,,auto+accepted,0
+pdq39_06_getting_around_house,PDQ-39,QOL,,,auto+accepted,0
+pdq39_07_getting_around_in_public,PDQ-39,QOL,,,auto+accepted,0
+pdq39_08_need_someone_to_accompany,PDQ-39,QOL,,,auto+accepted,0
+pdq39_09_worried_about_falling,PDQ-39,QOL,,,auto+accepted,0
+pdq39_10_confined_to_house,PDQ-39,QOL,,,auto+accepted,0
+pdq39_11_showering,PDQ-39,QOL,,,auto+accepted,0
+pdq39_12_dressing,PDQ-39,QOL,,,auto+accepted,0
+pdq39_13_buttons_and_shoelaces,PDQ-39,QOL,,,auto+accepted,0
+pdq39_14_writing,PDQ-39,QOL,,,auto+accepted,0
+pdq39_15_cutting_food,PDQ-39,QOL,,,auto+accepted,0
+pdq39_16_spill_drink,PDQ-39,QOL,,,auto+accepted,0
+pdq39_17_depressed,PDQ-39,QOL,Depression,incidental,auto+accepted,0
+pdq39_18_lonely,PDQ-39,QOL,,,auto+accepted,0
+pdq39_20_angry,PDQ-39,QOL,,,auto+accepted,0
+pdq39_21_anxious,PDQ-39,QOL,Anxiety,incidental,auto+accepted,0
+pdq39_22_worried_about_future,PDQ-39,QOL,,,auto+accepted,0
+pdq39_23_hide_pd_from_people,PDQ-39,QOL,,,auto+accepted,0
+pdq39_24_avoid_eat_drink_in_public,PDQ-39,QOL,,,auto+accepted,0
+pdq39_25_embarassed_in_public,PDQ-39,QOL,,,auto+accepted,0
+pdq39_26_worried_about_reactions,PDQ-39,QOL,,,auto+accepted,0
+pdq39_27_close_personal_relations,PDQ-39,QOL,,,auto+accepted,0
+pdq39_28_support_from_spouse,PDQ-39,QOL,,,auto+accepted,0
+pdq39_30_sleep_in_day,PDQ-39,QOL,Daytime sleepiness,incidental,auto+accepted,0
+pdq39_31_problem_with_concentration,PDQ-39,QOL,,,auto+accepted,0
+pdq39_32_memory_is_failing,PDQ-39,QOL,Cognition,incidental,auto+accepted,0
+pdq39_33_hallucinations,PDQ-39,QOL,Cognition,incidental,auto+accepted,0
+pdq39_34_speaking,PDQ-39,QOL,,,auto+accepted,0
+pdq39_35_unable_to_communicate,PDQ-39,QOL,,,auto+accepted,0
+pdq39_36_felt_ignored,PDQ-39,QOL,,,auto+accepted,0
+pdq39_37_muscle_cramps,PDQ-39,QOL,Pain,incidental,auto+accepted,0
+pdq39_38_joint_pains,PDQ-39,QOL,Pain,incidental,auto+accepted,0
+pdq39_39_hot_or_cold,PDQ-39,QOL,,,auto+accepted,0
+pdq39_mobility_score,PDQ-39,QOL,,,auto+accepted,0
+pdq39_adl_score,PDQ-39,QOL,,,auto+accepted,0
+pdq39_emotional_score,PDQ-39,QOL,,,auto+accepted,0
+pdq39_stigma_score,PDQ-39,QOL,,,auto+accepted,0
+pdq39_social_score,PDQ-39,QOL,,,auto+accepted,0
+pdq39_cognition_score,PDQ-39,QOL,Cognition,incidental,auto+accepted,0
+pdq39_communication_score,PDQ-39,QOL,,,auto+accepted,0
+pdq39_discomfort_score,PDQ-39,QOL,,,auto+accepted,0
+code_upd101_intellectual_impairment,UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+code_upd102_thought_disorder,UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+code_upd103_depression,UPDRS Part I,UPDRS (MDS / original),Depression,secondary,auto+accepted,0
+code_upd104_motivation,UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+updrs_part_i_summary_score,UPDRS Part I,UPDRS (MDS / original),,,auto+accepted,0
+pdrfuq_coffee,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_black_tea,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_green_tea,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_caffeinated_soda,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_concussion,PD RFQ-U,MULTIPLE,Head trauma,secondary,auto+accepted,0
+pdrfuq_ibuprofen,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_aspirin,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_other_anti_inflmmatory_med,PD RFQ-U,MULTIPLE,Pain,secondary,auto+accepted,0
+pdrfuq_smoke_100,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_smoke_regularly,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_smokeless_tabacco,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_alcohol_100,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+pdrfuq_alcohol_regularly,PD RFQ-U,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_job_pesticides,MERQ-PD-B,MULTIPLE,Environment,secondary,auto+accepted,0
+merq_home_pesticides,MERQ-PD-B,MULTIPLE,Environment,secondary,auto+accepted,0
+merq_chemical_solvents,MERQ-PD-B,MULTIPLE,Environment,secondary,auto+accepted,0
+merq_heavy_metals,MERQ-PD-B,MULTIPLE,Environment,secondary,auto+accepted,0
+merq_chemicals_other,MERQ-PD-B,MULTIPLE,Environment,secondary,auto+accepted,0
+merq_caffeine,MERQ-PD-B,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_caffeine_current,MERQ-PD-B,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_cigarettes,MERQ-PD-B,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_cigarettes_years,MERQ-PD-B,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_cigarettes_daily,MERQ-PD-B,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_cigarettes_current,MERQ-PD-B,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_cigarettes_current_amount,MERQ-PD-B,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_smoker_home,MERQ-PD-B,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+merq_head_injury,MERQ-PD-B,MULTIPLE,Head trauma,secondary,auto+accepted,0
+merq_head_injury_year,MERQ-PD-B,MULTIPLE,Head trauma,secondary,auto+accepted,0
+merq_ovaries_surgery,MERQ-PD-B,MULTIPLE,,,auto+accepted,0
+merq_ovaries_surgery_year,MERQ-PD-B,MULTIPLE,,,auto+accepted,0
+merq_depression,MERQ-PD-B,MULTIPLE,Depression,secondary,auto+accepted,0
+merq_depression_dx_year,MERQ-PD-B,MULTIPLE,Depression,secondary,auto+accepted,0
+merq_anxiety,MERQ-PD-B,MULTIPLE,Anxiety,secondary,auto+accepted,0
+merq_anxiety_dx_year,MERQ-PD-B,MULTIPLE,Anxiety,secondary,auto+accepted,0
+m_merq_job_longest,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_age_job_longest,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_job_length_longest,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_job_second,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_age_job_second,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_job_length_second,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_job_third,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_age_job_third,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_job_length_third,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_job_pesticide,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_pesticide_name,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_pesticide_first_age,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_pesticide_last_age,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_job_solvent,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_solvent_name,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_solvent_first_age,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_solvent_last_age,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_job_weld,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_weld_first_age,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_weld_last_age,Modified MERQ-PD,MULTIPLE,Environment,secondary,auto+accepted,0
+m_merq_smoking_ever,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_smoking_first_age,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_smoking_continue,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_smoking_last_age,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_smoke_per_day,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_caffeine_ever,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_caffeine_first_age,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_caffeine_continue,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_caffeine_last_age,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_caffeine_per_day,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_head_injury_ever,Modified MERQ-PD,MULTIPLE,Head trauma,secondary,auto+accepted,0
+m_merq_head_injury_count,Modified MERQ-PD,MULTIPLE,Head trauma,secondary,auto+accepted,0
+m_merq_head_injury_first_age,Modified MERQ-PD,MULTIPLE,Head trauma,secondary,auto+accepted,0
+m_merq_head_injury_last_age,Modified MERQ-PD,MULTIPLE,Head trauma,secondary,auto+accepted,0
+m_merq_alcohol_ever,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_alcohol_first_age,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_alcohol_continue,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_alcohol_last_age,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_alcohol_per_week,Modified MERQ-PD,MULTIPLE,Lifestyle,secondary,auto+accepted,0
+m_merq_diabetes_dx,Modified MERQ-PD,MULTIPLE,Medical history,secondary,review,0
+m_merq_diabetes_dx_age,Modified MERQ-PD,MULTIPLE,Medical history,secondary,review,0
+m_merq_exercise_per_week,Modified MERQ-PD,MULTIPLE,Vital signs,secondary,auto+accepted,0
+m_merq_exercise_minutes,Modified MERQ-PD,MULTIPLE,,,auto+accepted,0
+m_merq_active_duration,Modified MERQ-PD,MULTIPLE,,,auto+accepted,0
+asap_id,Pathology,Pathology,,,auto+accepted,0
+path_brain_id,Pathology,Pathology,,,auto+accepted,0
+path_year_death,Pathology,Pathology,Mortality / vital status,secondary,auto+accepted,0
+age_at_death,Pathology,Pathology,Mortality / vital status,secondary,auto+accepted,0
+cause_death,Pathology,Pathology,Mortality / vital status,secondary,auto+accepted,0
+path_PMI_hours,Pathology,Pathology,Mortality / vital status,secondary,auto+accepted,0
+pm_RIN,Pathology,Pathology,,,auto+accepted,0
+pm_PH,Pathology,Pathology,,,auto+accepted,0
+path_autopsy_dx_main,Pathology,Pathology,,,auto+accepted,0
+path_autopsy_dx_brain_bank,Pathology,Pathology,,,auto+accepted,0
+path_braak_nft,Pathology,Pathology,,,auto+accepted,0
+path_braak_asyn,Pathology,Pathology,,,auto+accepted,0
+path_cerad,Pathology,Pathology,,,auto+accepted,0
+path_thal,Pathology,Pathology,,,auto+accepted,0
+path_mckeith,Pathology,Pathology,,,auto+accepted,0
+path_sn_neuronal_loss,Pathology,Pathology,,,auto+accepted,0
+path_infarcts,Pathology,Pathology,,,auto+accepted,0
+path_nia_ri,Pathology,Pathology,,,auto+accepted,0
+path_nia_aa_amyloid,Pathology,Pathology,,,auto+accepted,0
+path_nia_aa_braak,Pathology,Pathology,,,auto+accepted,0
+path_nia_aa_cerad,Pathology,Pathology,,,auto+accepted,0
+known_pathogenic_mutation,Pathology,Pathology,,,auto+accepted,0
+arteriolosclerosis_severity_scale,Pathology,Pathology,,,auto+accepted,0
+atherosclerosis,Pathology,Pathology,,,auto+accepted,0
+amyloid_angiopathy_severity_scale,Pathology,Pathology,,,auto+accepted,0
+dlb_essential_dementia,DLB,Disease-specific scales,Cognition,incidental,auto+accepted,0
+dlb_core_01_cognitive_fluctutations,DLB,Disease-specific scales,Cognition,incidental,auto+accepted,0
+dlb_core_01_cognitive_fluctutations,DLB,Disease-specific scales,Disease course / complications,incidental,auto+accepted,0
+dlb_core_02_visual_hallucinations,DLB,Disease-specific scales,Cognition,incidental,auto+accepted,0
+dlb_core_03_RBD,DLB,Disease-specific scales,Cognition,incidental,auto+accepted,0
+dlb_core_03_RBD,DLB,Disease-specific scales,Daytime sleepiness,incidental,auto+accepted,0
+dlb_core_03_RBD,DLB,Disease-specific scales,RBD,incidental,auto+accepted,0
+dlb_core_04_parkinsonism,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_supportive_01_sensitivity_antipsychotics,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_supportive_02_postural insitability,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_supportive_03_repeated_falls,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_supportive_04_syncope_unresponsiveness,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_supportive_05_autonomic_dysfunction,DLB,Disease-specific scales,Autonomic,incidental,auto+accepted,0
+dlb_supportive_05_autonomic_dysfunction,DLB,Disease-specific scales,Disease course / complications,incidental,auto+accepted,0
+dlb_supportive_06_hypersomnia,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_supportive_07_hyposmia,DLB,Disease-specific scales,Olfaction,incidental,auto+accepted,0
+dlb_supportive_08_other_hallucinations,DLB,Disease-specific scales,Cognition,incidental,auto+accepted,0
+dlb_supportive_09_systematised_delusions,DLB,Disease-specific scales,Cognition,incidental,auto+accepted,0
+dlb_supportive_10_apathy_anxiety_depression,DLB,Disease-specific scales,Depression,incidental,auto+accepted,0
+dlb_supportive_10_apathy_anxiety_depression,DLB,Disease-specific scales,Anxiety,incidental,auto+accepted,0
+dlb_indicative_biomarkers_01_reduced_DA_SPECT_PET,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_indicative_biomarkers_02_low_MIBG,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_indicative_biomarkers_03_polysomnograph,DLB,Disease-specific scales,Daytime sleepiness,incidental,auto+accepted,0
+dlb_indicative_biomarkers_03_polysomnograph,DLB,Disease-specific scales,RBD,incidental,auto+accepted,0
+dlb_supportive_biomarkers_01_MTL_preservation,DLB,Disease-specific scales,Family history,incidental,auto+accepted,0
+dlb_supportive_biomarkers_02_low_perfusion_metabolism_SPECT_PET,DLB,Disease-specific scales,,,auto+accepted,0
+dlb_supportive_biomarkers_03_posterior_slow_EEG_fluctuations,DLB,Disease-specific scales,Disease course / complications,incidental,auto+accepted,0
+dlb_criteria_application,DLB,Disease-specific scales,,,auto+accepted,0
+cbfs_a_01_speaking,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_02_saliva_drooling,CBFS A,Disease-specific scales,Autonomic,incidental,auto+accepted,0
+cbfs_a_03_eating_tasks,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_04_chewing_swallowing,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_05_dressing,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_06_hygiene,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_07_handwriting_typing,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_08_hobbies_leisure,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_09_bed_turning,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_10_getting_in_bed_car_chair,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_11_walking_standing_balance,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_12_invol_movements,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_13_urinary_control,CBFS A,Disease-specific scales,Autonomic,incidental,auto+accepted,0
+cbfs_a_14_visual,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_a_summary_score,CBFS A,Disease-specific scales,,,auto+accepted,0
+cbfs_b_01_understanding_reading,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_02_thinking_clearly,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_03_remembering,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_04_finances,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_05_complex_multiple_tasks,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_06_appropriate_behaviour,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_07_repetitive_tasks,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_08_diet_food_preferences,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_09_mood,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_10_anxious_panicky,CBFS B,Disease-specific scales,Anxiety,incidental,auto+accepted,0
+cbfs_b_11_motivated,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_12_caring,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_13_agitation,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_15_awake_during_day,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_17_orientation,CBFS B,Disease-specific scales,,,auto+accepted,0
+cbfs_b_summary_score,CBFS B,Disease-specific scales,,,auto+accepted,0

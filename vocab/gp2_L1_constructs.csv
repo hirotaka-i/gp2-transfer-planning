@@ -1,0 +1,35 @@
+category,l1,type,default_on,ask_at_stage1,phenotype_scope,fixed_design,in_dictionary,examples,note
+History,Demographics,construct,1,1,all,Cross-sectional,True,"sex, age, education, self-reported race",
+History,Environment,construct,0,1,all,,True,"occupation history, pesticides, solvents, welding, heavy metals  ·  also appears inside: MERQ-PD-B, Modified MERQ-PD","Residence, occupation, exposures"
+History,Family history,construct,1,1,all,Cross-sectional,True,"affected relatives, family structure, inheritance pattern",
+History,Head trauma,construct,0,1,all,,True,"concussion / head injury history, with age and count  ·  also appears inside: MERQ-PD-B, Modified MERQ-PD, PD RFQ-U",
+History,Lifestyle,construct,0,1,all,,True,"smoking, alcohol, caffeine, exercise, income  ·  also appears inside: MERQ-PD-B, Modified MERQ-PD, PD RFQ-U","Smoking, alcohol, caffeine, income"
+History,Medical history,construct,0,1,all,,True,"comorbidities — hypertension, diabetes, depression, cardiovascular disease, cancer etc",
+History,Medication,construct,1,1,all,,True,"current medication, LEDD, anti-parkinsonian drug use",LEDD lives here
+Diagnosis & course,Diagnosis,construct,1,1,all,,True,"primary diagnosis, diagnostic certainty, diagnosis change, MDS diagnostic criteria checklist",Diagnostic criteria differ by phenotype
+Diagnosis & course,Disease course / complications,construct,0,1,case,,True,"Event milestones of levodopa start, HY stage 3, motor fluctuation, dyskinesia, mild cognitive impairment, dementia","Event milestones (HY3, dyskinesia, fluctuation, levodopa, dementia, death) plus clinician-recorded non-motor complications"
+Diagnosis & course,Mortality / vital status,construct,0,1,all,,True,"alive/dead with date, age at censoring, cause of death  ·  also appears inside: Diagnosis, PD History, Pathology",Alive/dead with date
+Clinical assessment,ADL,construct,0,1,all,,True,"Schwab & England, Rankin Scale",
+Clinical assessment,Anxiety,construct,0,1,all,,True,"any anxiety scale, or anxiety recorded in medical history",No dedicated modality yet
+Clinical assessment,Autonomic,construct,1,1,all,,True,"SCOPA-AUT, orthostatic hypotension (supine/standing BP and HR)",Includes orthostatic hypotension
+Clinical assessment,Blood tests,construct,0,1,all,,True,"CBC / differential white cell counts, blood chemistry etc",
+Clinical assessment,Cognition,construct,1,1,all,,True,"MoCA, MMSE, SCOPA-COG, SDM",
+Clinical assessment,Daytime sleepiness,construct,0,1,all,,True,"Epworth Sleepiness Scale",
+Clinical assessment,Depression,construct,0,1,all,,True,"GDS-15, or any other depression scale (name it in the free text)",Scales vary widely; free text expected
+Clinical assessment,Disease-specific scales,instrument,1,1,atypical,,True,"MDS-PSP, PSP-RS, MDS-MSA, UMSARS, CBD/CBS-Armstrong, CBFS, DLB criteria, IDEA",PSP / MSA / CBD / DLB batteries
+Clinical assessment,Global severity (CISI-PD),instrument,1,1,case,,True,CISI-PD,
+Clinical assessment,Impulse control disorder,construct,0,1,case,,True,"QUIP-RS, QUIP-CS",
+Clinical assessment,Motor staging (H&Y),instrument,1,1,case,,True,Hoehn & Yahr stage,
+Clinical assessment,Olfaction,construct,1,1,all,,True,"UPSIT, Sniffin' Sticks, or other smell test",
+Clinical assessment,Pain,construct,0,1,all,,True,"King's PD pain scale",
+Clinical assessment,QOL,construct,0,1,all,,True,"PDQ-39, PDQ-8",
+Clinical assessment,RBD,construct,1,1,all,,True,"RBD Screening Questionnaire, single-question screen, PSG-confirmed diagnosis",
+Clinical assessment,UPDRS (MDS / original),instrument,1,1,case,,True,"MDS-UPDRS Parts I-IV, or the original UPDRS",Parts I-IV asked as one at Stage 1
+Clinical assessment,Vital signs,construct,0,1,all,,True,"height, weight, BMI, heart rate, blood pressure  ·  also appears inside: Modified MERQ-PD","Height, weight, BMI, HR, BP"
+Imaging,CT,construct,0,1,all,,False,structural CT,STAGE 1 ONLY - no dictionary schema
+Imaging,DAT-SPECT,instrument,0,1,all,,True,DAT scan striatal binding ratios,
+Imaging,MIBG,instrument,0,1,all,,True,cardiac MIBG H/M ratio,
+Imaging,MRI,construct,0,1,all,,False,structural or functional MRI,STAGE 1 ONLY - no dictionary schema
+Imaging,PET,construct,0,1,all,,False,any PET tracer,STAGE 1 ONLY - no dictionary schema
+Biomarker,SAA,construct,1,1,all,,True,alpha-synuclein seeding amplification assay result,
+Neuropathology,Pathology,construct,0,1,all,Cross-sectional,True,"autopsy diagnosis, Braak staging, brain weight, PMI",

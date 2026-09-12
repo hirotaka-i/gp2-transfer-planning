@@ -1,0 +1,16 @@
+assay,tissue,label,note
+RNAseq,blood,RNAseq — blood,
+RNAseq,brain,RNAseq — brain,
+RNAseq,other tissue,RNAseq — other tissue,tissue name required (free text)
+Methylation,blood,Methylation — blood,
+Methylation,brain,Methylation — brain,
+Methylation,other tissue,Methylation — other tissue,tissue name required (free text)
+Metabolomics,blood,Metabolomics — blood,
+Metabolomics,brain,Metabolomics — brain,
+Metabolomics,other tissue,Metabolomics — other tissue,tissue name required (free text)
+Proteomics,blood,Proteomics — blood,
+Proteomics,brain,Proteomics — brain,
+Proteomics,other tissue,Proteomics — other tissue,tissue name required (free text)
+Exome/Genome sequence,blood,Exome/Genome sequence — blood,
+Exome/Genome sequence,brain,Exome/Genome sequence — brain,
+Exome/Genome sequence,other tissue,Exome/Genome sequence — other tissue,tissue name required (free text)
