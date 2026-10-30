@@ -120,6 +120,7 @@ INSTRUMENT_GROUPS = [
     ("Cognition", "Symbol Digit Modalities", ["SDM"], False, ""),
     ("Cognition", "IDEA screening questionnaire", ["IDEA Screening Questionnaire"],
      False, "dementia screening designed for low-literacy settings"),
+    ("General Status Evaluation", "CISI-PD", ["CISI-PD"], True, "all four parts"),
     ("ADL", "Schwab & England", ["Schwab England ADL"], True, ""),
     ("ADL", "Modified Rankin Scale", ["Rankin Scale"], False, ""),
     ("QOL", "PDQ-39", ["PDQ-39"], True, ""),
@@ -134,6 +135,7 @@ INSTRUMENT_GROUPS = [
     ("RBD", "RBD Screening Questionnaire", ["RBD Screening Questionnaire"], False,
      "RBDSQ"),
     ("RBD", "RBD single-question screen", ["RBD Single-Question Screen"], False, ""),
+    ("Sleep quality", "Epworth Sleepiness Scale", ["Epworth Sleepiness Scale"], True, ""),
     ("Depression", "GDS-15", ["Geriatric Depression Scale: Short Form"], True, ""),
     ("Impulse control disorder", "QUIP-RS", ["QUIP-RS"], True, ""),
     ("Impulse control disorder", "QUIP-CS", ["QUIP-CS"], False, "the short form"),
@@ -218,6 +220,11 @@ def default_on(g: dict, phenotypes: list[str]) -> bool:
     return g["default"]
 
 
+def dev_mode() -> bool:
+    """Maintainer-only panels, switched on by opening the app with ?dev=1."""
+    return st.query_params.get("dev") == "1"
+
+
 def vocab_check(l2) -> tuple[list[str], list[str]]:
     """Keep this table and the data dictionary honest about each other.
 
@@ -246,8 +253,7 @@ DEFAULT_META = {
     "deadline": date(date.today().year, 12, 31).isoformat(),
 }
 WIDGET_KEYS = ["w_cohort_id", "w_contact_name", "w_contact_email", "w_status",
-               "w_final_year", "w_deadline", "w_phenotypes", "w_samples",
-               "w_extra_domains"]
+               "w_final_year", "w_deadline", "w_phenotypes", "w_samples"]
 
 
 def init_state():
@@ -275,7 +281,6 @@ def init_state():
     st.session_state.setdefault("w_deadline", date.fromisoformat(DEFAULT_META["deadline"]))
     st.session_state.setdefault("w_phenotypes", [])
     st.session_state.setdefault("w_samples", [])
-    st.session_state.setdefault("w_extra_domains", [])
 
 
 def persist_widget_state():
@@ -848,9 +853,10 @@ def screen_instruments():
     if s1:
         reported = [c for c, cells in s1.get("designs", {}).items()
                     if any(v for p, v in cells.items() if p in phenos())]
-        st.caption("Everything Stage 1 said you collect, in one table. The "
-                   "instrument most cohorts use is ticked; the alternatives are "
-                   "listed so you can see what else counts.")
+        st.caption("This table lists the instruments for every domain you said "
+                   "you collect in the site interest form. The ones most cohorts use are already "
+                   "ticked. In the **Transfer** column, tick every instrument whose "
+                   "data you will send to GP2, and untick any you will not.")
     else:
         reported = sorted({c for c, _, _, _, _ in INSTRUMENT_GROUPS})
         st.caption("No Stage 1 answers, so every domain is shown.")
@@ -893,50 +899,19 @@ def screen_instruments():
         r.Instrument for r in edited.itertuples() if r.Transfer)
     st.session_state["_inst_init"] = True
 
-    st.subheader("Anything not listed in these domains")
-    st.caption("A measure you use that is not in the table above. One domain can "
-               "carry several — add a row for each.")
-    extras_table("extras_reported", [c for c in reported if c not in NO_OTHER])
+    remaining = sorted({c for c, _, _, _, _ in INSTRUMENT_GROUPS
+                        if c not in reported and c not in NOT_OFFERED_IN_STAGE2})
 
-    st.subheader("Anything else to share?")
-    remaining = [c for c, _, _, _, _ in INSTRUMENT_GROUPS
-                 if c not in reported and c not in NOT_OFFERED_IN_STAGE2]
-    remaining = sorted(set(remaining))
-    st.caption("Domains Stage 1 did not report. Adding one here brings its "
-               "instruments into the plan.")
-    st.multiselect("Domains to add", remaining, key="w_extra_domains")
-    added = st.session_state["w_extra_domains"]
-    if added:
-        extra_opts = offered_options(added)
-        sel2 = set(st.session_state["selected"])
-
-        def build2():
-            return pd.DataFrame([{
-                "Domain": ", ".join(o["domains"]), "Instrument": o["label"],
-                "Transfer": o["label"] in sel2, "What it is": o["note"],
-            } for o in extra_opts])
-
-        src2 = editor_source("instruments_extra",
-                             tuple(o["label"] for o in extra_opts), build2)
-        edited2 = st.data_editor(
-            src2, hide_index=True, width="stretch",
-            key=editor_key("instruments_extra"),
-            column_config={
-                "Domain": st.column_config.TextColumn(disabled=True, width="medium"),
-                "Instrument": st.column_config.TextColumn(disabled=True,
-                                                          width="medium"),
-                "Transfer": st.column_config.CheckboxColumn(width="small"),
-                "What it is": st.column_config.TextColumn(disabled=True,
-                                                          width="large"),
-            })
-        for r in edited2.itertuples():
-            sel2.add(r.Instrument) if r.Transfer else sel2.discard(r.Instrument)
-        st.session_state["selected"] = sorted(sel2)
-
-    extras_table("extras_other",
-                 [c for c in remaining if c not in NO_OTHER] + [OTHER_DOMAIN],
-                 caption="Or a measure with no GP2 domain at all — pick "
-                         f"**{OTHER_DOMAIN}** as the domain.")
+    # One free-text table for every domain, reported or not, so the cohort is
+    # asked "anything else?" once.
+    st.subheader("Anything not listed above?")
+    extras_table("extras",
+                 [c for c in reported + remaining if c not in NO_OTHER]
+                 + [OTHER_DOMAIN],
+                 caption="A questionnaire or measure you use that is not in the "
+                         "table above. One domain can include several — add a "
+                         f"row for each. If it fits no GP2 domain, pick "
+                         f"**{OTHER_DOMAIN}**.")
 
     chosen = selected_instruments()
     c1, c2 = st.columns(2)
@@ -947,17 +922,20 @@ def screen_instruments():
         st.caption("Reported in Stage 1 but not planned here: "
                    + ", ".join(dropped) + ".")
 
-    missing, unreachable = vocab_check(l2)
+    missing, unreachable = vocab_check(l2) if dev_mode() else ([], [])
     if missing or unreachable:
-        with st.expander("⚠︎ Data dictionary consistency", expanded=False):
+        with st.expander("⚠︎ Measures GP2 does not collect yet", expanded=False):
             if missing:
-                st.warning("Named in this app but not in the dictionary — renamed, "
-                           "or not added yet: " + ", ".join(missing))
+                st.warning("You can select these, but GP2's data dictionary does "
+                           "not include them yet (or lists them under another "
+                           "name), so their data cannot be transferred until it "
+                           "does: " + ", ".join(missing))
             if unreachable:
-                st.info("In the dictionary but no option here would transfer it: "
-                        + ", ".join(unreachable))
-            st.caption("Edit `INSTRUMENT_GROUPS` at the top of this file to "
-                       "reconcile.")
+                st.info("GP2's data dictionary includes these, but this form has "
+                        "no option for them yet: " + ", ".join(unreachable)
+                        + ". If you collect any of them, tell your GP2 contact.")
+            st.caption("Developer mode. Reconcile via `INSTRUMENT_GROUPS` at "
+                       "the top of this file.")
 
 
 def screen_design():
@@ -968,11 +946,11 @@ def screen_design():
         return
 
     if st.session_state["stage1"]:
-        st.caption("Inherited from your Stage 1 answers — an instrument serving a "
+        st.caption("Inherited from your site interest form answers — an instrument serving a "
                    "longitudinal domain arrives as **LT**. Change anything that "
                    "differs at instrument level.")
     else:
-        st.caption("No Stage 1 answers to inherit, so everything starts at **CS**.")
+        st.caption("No site interest form answers to inherit, so everything starts at **CS**.")
     st.caption(f"**{NOT_COLLECTED}** not collected in that group · **CS** once per "
                f"person · **LT** repeated over time.")
 
@@ -1005,7 +983,7 @@ def screen_dna():
     st.caption("DNA defines the cohort size everything else is measured against. "
                "One row per participant — no repeats.")
     if why:
-        st.info(f"Stage 1 says {why}, so these numbers start from your **{basis}** "
+        st.info(f"Site interest form says {why}, so these numbers start from your **{basis}** "
                 f"counts. Enter the participants who will end up with usable DNA — "
                 f"that may be fewer than the samples shipped.")
     if not phenos():
@@ -1151,16 +1129,24 @@ def dna_basis() -> tuple[str, str]:
     study = s1.get("study", {})
     if study.get("w_dna_local", "Yes") == "Yes":
         return "DNA", "extracted DNA is already available"
-    src = study.get("w_dna_source", "Blood")
-    sample = DNA_SOURCE_SAMPLE.get(src)
-    if not sample:
-        other = study.get("w_dna_source_other", "").strip()
-        return (other or "DNA"), f"DNA will be extracted from {other or src.lower()}"
-    return sample, f"DNA will be extracted from {src.lower()} after transfer"
+    srcs = study.get("w_dna_source") or ["Blood"]
+    if isinstance(srcs, str):           # Stage 1 files from before multi-select
+        srcs = [srcs]
+    other = study.get("w_dna_source_other", "").strip()
+    named = [other or s.lower() if s == "Other" else s.lower() for s in srcs]
+    why = f"DNA will be extracted from {' and '.join(named)} after transfer"
+    samples = [DNA_SOURCE_SAMPLE.get(s) or other or "DNA" for s in srcs]
+    # Several sources: start from the one Stage 1 reported most participants
+    # for, the nearest single-row stand-in for "participants with any source".
+    est = stage1_samples()
+    if len(samples) > 1 and not est.empty:
+        totals = est.groupby("item").n_now.sum()
+        samples.sort(key=lambda x: -totals.get(x, 0))
+    return samples[0], why
 
 
 def stage1_samples() -> pd.DataFrame:
-    """Stage 1's biosample estimates, as (phenotype, item, now, horizon)."""
+    """Site interest form's biosample estimates, as (phenotype, item, now, horizon)."""
     s1 = st.session_state["stage1"]
     if not s1:
         return pd.DataFrame()
@@ -1169,9 +1155,9 @@ def stage1_samples() -> pd.DataFrame:
 
 
 def reconcile(long: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
-    """Compare the firm plan against what Stage 1 estimated.
+    """Compare the firm plan against what site interest form estimated.
 
-    Differences are expected — Stage 1 is an estimate made before any agreement,
+    Differences are expected — Site interest form is an estimate made before any agreement,
     often months earlier and sometimes by someone else. Nothing here blocks
     submission. The point is that GP2 can see where a cohort's offer moved, and
     in which direction, which is invisible today because the two live in
@@ -1233,8 +1219,8 @@ def reconcile(long: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     added = sorted({m for m in selected_instruments()
                     if not (set(unit_constructs_of(m)) & reported)})
     if added:
-        notes.append("Planned but not reported at Stage 1: " + ", ".join(added)
-                     + ". Not a problem — Stage 1 is an estimate — but worth a "
+        notes.append("Planned but not reported in the site interest form: " + ", ".join(added)
+                     + ". Not a problem — Site interest form is an estimate — but worth a "
                        "look if it was unintended.")
 
     # --- phenotypes
@@ -1243,10 +1229,10 @@ def reconcile(long: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
         extra = ps - s1_ph
         gone = s1_ph - ps
         if extra:
-            notes.append("Phenotypes in this agreement that Stage 1 did not list: "
+            notes.append("Phenotypes in this agreement that site interest form did not list: "
                          + ", ".join(sorted(extra)) + ".")
         if gone:
-            notes.append("Phenotypes reported at Stage 1 but not covered here: "
+            notes.append("Phenotypes reported in the site interest form but not covered here: "
                          + ", ".join(sorted(gone)) + ".")
     return pd.DataFrame(rows), notes
 
@@ -1301,13 +1287,13 @@ def build_pdf(long: pd.DataFrame) -> bytes:
 
     table, notes = reconcile(long)
     if s1:
-        content = [Paragraph2("Stage 1 was an estimate made before any agreement, "
+        content = [Paragraph2("Site interest form was an estimate made before any agreement, "
                               "so these are not expected to match exactly.")]
         if not table.empty:
             content += report.frame(table)
         for n in notes:
             content.append(Paragraph2(n.replace("**", "")))
-        sections.append(("Reconciliation with Stage 1", content))
+        sections.append(("Reconciliation with Site Interest Form", content))
     return report.build("GP2 Data & Sample Transfer Plan",
                         report.stamp(m["cohort_id"]), sections)
 
@@ -1352,8 +1338,8 @@ def screen_review():
 
     table, notes = reconcile(long)
     if st.session_state["stage1"]:
-        st.subheader("Reconciliation with Stage 1")
-        st.caption("Stage 1 was an estimate made before any agreement, so these "
+        st.subheader("Reconciliation with Site Interest Form")
+        st.caption("Site interest form was an estimate made before any agreement, so these "
                    "will not match exactly and are not expected to. Nothing here "
                    "blocks submission — it is here so the change is visible.")
         if not table.empty:
@@ -1367,6 +1353,8 @@ def screen_review():
             st.success("The plan matches what Stage 1 reported.")
 
     st.subheader("What gets stored")
+    st.caption("This is the information that we will be tracking about your "
+               "study, samples, and promised clinical data.")
     st.dataframe(long, hide_index=True, width="stretch")
     st.caption("One row per phenotype x instrument x period. Adding an instrument, "
                "a phenotype or a year never changes the schema.")
@@ -1407,7 +1395,7 @@ DEMO_DNA = {"PD": (300, [200, 100, 0]), "Control": (300, [0, 0, 0]),
 
 
 def load_demo():
-    """A cohort that already submitted Stage 1, so inheritance is visible."""
+    """A cohort that already submitted site interest form, so inheritance is visible."""
     st.session_state["stage1"] = {
         "submitted": date.today().isoformat(),
         "designs": {
@@ -1435,7 +1423,7 @@ def load_demo():
         "w_contact_email": "a.example@institution.edu", "w_status": "Ongoing",
         "w_final_year": date.today().year + 2,
         "w_phenotypes": ["PD", "Control", "Prodromal"],
-        "w_samples": ["blood", "plasma", "CSF"], "w_extra_domains": [],
+        "w_samples": ["blood", "plasma", "CSF"],
     })
     st.session_state["designs"] = {}
     st.session_state["selected"] = []
@@ -1462,9 +1450,11 @@ def sidebar():
         st.rerun()
     _, l2, _, bios = load_vocab()
     st.sidebar.caption(f"Vocabulary: {len(l2)} instruments, {len(bios)} biosamples.")
+    if dev_mode():
+        st.sidebar.caption("Developer mode on.")
     st.sidebar.divider()
-    st.sidebar.caption("Stage 1 suggests instruments; it never decides them. The "
-                       "review screen reconciles this plan against what Stage 1 "
+    st.sidebar.caption("Site interest form suggests instruments; it never decides them. The "
+                       "review screen reconciles this plan against what site interest form "
                        "estimated.")
     return step
 

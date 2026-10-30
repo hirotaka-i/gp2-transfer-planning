@@ -105,8 +105,27 @@ def test_stage1_defaults_and_captions():
     ticked = [c.label for c in at.checkbox if c.value]
     unticked = [c.label for c in at.checkbox if not c.value]
     assert 5 < len(ticked) < len(unticked), "default_on is not being applied"
-    assert any("SCOPA-AUT" in str(c.value) for c in at.caption), \
+    assert any("SCOPA-AUT" in str(c.value) for c in at.markdown), \
         "example captions are missing — stale vocab CSV?"
+
+
+def test_stage1_prodromal_has_no_dx_criteria():
+    """Prodromal, like controls, is asked only for inclusion/exclusion."""
+    at = run(STAGE1)
+    at.sidebar.radio[0].set_value("2. Participants").run()
+    keys = {w.key for w in at.selectbox}
+    assert "crit_dx::PD" in keys and "crit_dx::Prodromal" not in keys
+
+
+def test_stage1_several_dna_sources_each_need_their_sample():
+    at = run(STAGE1)
+    at.sidebar.radio[0].set_value("4. Samples & numbers").run()
+    at.radio(key="w_dna_local").set_value("No").run()
+    at.multiselect(key="w_dna_source").set_value(["Blood", "Saliva"]).run()
+    at.sidebar.radio[0].set_value("6. Review & submit").run()
+    errs = [str(e.value) for e in at.error]
+    assert any("'saliva'" in e for e in errs), "second source not checked"
+    assert not any("'blood'" in e for e in errs)
 
 
 def test_stage1_timespan_seeds_the_matrix():
@@ -150,6 +169,20 @@ def test_stage1_projection_below_current_is_an_error():
 
 def test_stage2_every_screen_renders():
     visit_all(run(STAGE2))
+
+
+def test_stage2_dictionary_panel_is_developer_only():
+    """PIs should not see vocabulary upkeep; maintainers open with ?dev=1."""
+    def panel_shown(dev: bool) -> bool:
+        at = AppTest.from_file(STAGE2, default_timeout=TIMEOUT)
+        if dev:
+            at.query_params["dev"] = "1"
+        at.run()
+        at.sidebar.button[0].click().run()
+        at.sidebar.radio[0].set_value("2. What to transfer").run()
+        return any("does not collect yet" in e.label for e in at.expander)
+    assert not panel_shown(False)
+    assert panel_shown(True)
 
 
 def test_stage2_selection_survives_navigation():

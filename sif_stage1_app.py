@@ -49,20 +49,24 @@ DX_CRITERIA = {
     "FTD": ["Rascovsky 2011 (bvFTD)", "Gorno-Tempini 2011 (PPA)"],
     "AD": ["NIA-AA", "NINCDS-ADRDA"],
     "VaD": ["NINDS-AIREN"], "VaPD": ["NINDS-AIREN"],
-    "Prodromal": ["MDS research criteria for prodromal PD", "PREDICT-PD"],
 }
+# Prodromal is a case phenotype but has no diagnosis to confirm, so like the
+# controls it is asked only for inclusion and exclusion criteria.
+NO_DX_CRITERIA = {"Prodromal"}
 
 PRODROMAL_FEATURES = [
     "RBD - PSG confirmed", "RBD - interview suspected", "RBD - questionnaire only",
     "Hyposmia/anosmia - smell clinic confirmed", "Hyposmia/anosmia - objectively tested",
-    "Hyposmia/anosmia - self-reported", "At risk by MDS prodromal criteria",
+    "Hyposmia/anosmia - self-reported", "Pure autonomic failure (PAF)",
+    "At risk by MDS prodromal criteria",
     "At risk by PREDICT-PD", "At risk by polygenic risk score",
     "Non-manifesting carrier - GBA", "Non-manifesting carrier - LRRK2",
     "Non-manifesting carrier - PRKN/PINK1/DJ1", "Non-manifesting carrier - SNCA",
     "Non-manifesting carrier - other",
 ]
 CASE_CATEGORIES = ["Early-onset (AAO < 50)", "Late-onset", "Familial (2+ affected)",
-                   "Non-familial", "Movement-disorder-associated mutation carriers"]
+                   "Non-familial", "Movement-disorder-associated mutation carriers",
+                   "De novo"]
 TIMESPANS = ["Cross-sectional", "Cross-sectional plus", "Longitudinal (prospective)",
              "Longitudinal (retrospective)"]
 SETTINGS = ["Population sample", "Hospital", "Primary care", "Other"]
@@ -70,11 +74,14 @@ CONTEXTS = ["Observational study", "Interventional study (e.g. drug trial)"]
 REGIONS = ["North America", "South America", "Europe", "Africa", "Asia/Oceania",
            "Multi-region"]
 DNA_SOURCES = ["Blood", "Saliva", "Brain", "Other"]
-# Which biosample must be on the list for each answer, so the source of the DNA
-# is actually being transferred.
+# Which biosample must be on the list for each source, so the source of the DNA
+# is actually being transferred. A cohort may name several sources.
 DNA_SOURCE_SAMPLE = {"Blood": "blood", "Saliva": "saliva",
                      "Brain": "brain (post-mortem)"}
 YESNO = ["Yes", "No", "Not sure"]
+# Screen 3 shows these instead of the vocabulary's short name. The short name
+# is still what is stored, because Stage 2 maps on it.
+DOMAIN_LABELS = {"ADL": "Activities of daily living (ADL)"}
 
 # Timespan seeds the domain matrix. Cross-sectional plus is one assessment with
 # follow-up questionnaires / EPR / mortality tracking, which is exactly these two.
@@ -122,18 +129,19 @@ TEXT_KEYS = {
     "w_country": "", "w_doi": "", "w_setting_other": "", "w_dna_source_other": "",
     "w_ethics_board": "", "w_recruit_features": "", "w_free_note": "",
     "w_other_phenotype": "", "w_other_domains": "", "w_other_biosample": "",
+    "w_followup_other": "", "w_gp2_overlap": "",
 }
 CHOICE_KEYS = {
     "w_timespan": TIMESPANS[0], "w_setting": SETTINGS[0], "w_context": CONTEXTS[0],
     "w_region": REGIONS[0], "w_multisite": "No", "w_dna_local": "Yes",
-    "w_dna_source": DNA_SOURCES[0], "w_recontact": "Yes", "w_analytic": "Not sure",
+    "w_recontact": "Yes", "w_analytic": "Not sure",
     "w_redcap": "Not sure",
 }
 NUM_KEYS = {"w_year_start": 2010, "w_year_end": date.today().year + 3,
             "w_pct_monogenic": 0, "w_anc_eur": 0, "w_anc_afr": 0, "w_anc_asn": 0,
             "w_anc_hisp": 0}
 LIST_KEYS = ["w_phenotypes", "w_case_categories", "w_prodromal_features",
-             "w_biosamples", "w_omics", "w_followup"]
+             "w_biosamples", "w_omics", "w_followup", "w_dna_source"]
 DATE_KEYS = {"w_ethics_date": date.today()}
 
 WIDGET_KEYS = (list(TEXT_KEYS) + list(CHOICE_KEYS) + list(NUM_KEYS)
@@ -169,6 +177,13 @@ def phenos() -> list[str]:
 
 def case_phenos() -> list[str]:
     return [p for p in phenos() if p in CASE_PHENOTYPES]
+
+
+def dna_source_samples() -> list[str]:
+    """Biosample rows DNA would be extracted from, one per chosen source."""
+    other = st.session_state["w_dna_source_other"].strip()
+    return [DNA_SOURCE_SAMPLE.get(x) or other or "source material"
+            for x in st.session_state["w_dna_source"]]
 
 
 def editor_key(name: str) -> str:
@@ -271,6 +286,8 @@ def screen_study():
     c1.selectbox("Main site region", REGIONS, key="w_region")
     c2.text_input("Country of main site", key="w_country")
     c3.text_input("Publication DOI or study webpage", key="w_doi")
+    st.text_area("Does your study overlap with another GP2 study? If so, please "
+                 "specify that study", key="w_gp2_overlap", height=70)
 
     st.divider()
     st.selectbox("Study timespan", TIMESPANS, key="w_timespan",
@@ -278,18 +295,30 @@ def screen_study():
                       "any cell there.")
     if st.session_state["w_timespan"].startswith("Longitudinal"):
         st.multiselect("Planned follow-up duration and visit intervals",
-                       ["Every 6 months", "Annually", "Every 2 years", "Irregular"],
+                       ["Every 6 months", "Annually", "Every 2 years", "Other"],
                        key="w_followup")
+        if "Other" in st.session_state["w_followup"]:
+            st.text_input("Other interval — please specify", key="w_followup_other",
+                          placeholder="e.g. every 18 months, irregular clinic visits")
 
     ts = st.session_state["w_timespan"]
+    cs = "**CS (cross-sectional)** — measured once per participant"
+    lt = "**LT (longitudinal)** — measured repeatedly in the same participants over time"
+    then = ("This is only a starting point. On screen 3 you can change any "
+            "domain, for each participant group, to CS, LT or **None** (not "
+            "collected).")
     if ts == "Cross-sectional":
-        st.info("Every domain on screen 3 will start at **CS**.")
+        st.info(f"On screen 3 (Clinical & biomarker data), every clinical domain "
+                f"will start as {cs}. {then}")
     elif ts == "Cross-sectional plus":
-        st.info("Domains start at **CS**, except mortality / vital status and "
-                "disease course, which start at **LT** — that is what makes a "
-                "study cross-sectional *plus*.")
+        st.info(f"On screen 3 (Clinical & biomarker data), every clinical domain "
+                f"will start as {cs}. The exceptions are mortality / vital status "
+                f"and disease course, which start as {lt} — that follow-up is what "
+                f"makes a study cross-sectional *plus*. {then}")
     else:
-        st.info("Every domain on screen 3 will start at **LT**.")
+        st.info(f"On screen 3 (Clinical & biomarker data), every clinical domain "
+                f"will start as {lt}. {then} For example, a domain recorded only "
+                f"at the first visit, such as family history, should be CS.")
 
 
 def screen_participants():
@@ -306,7 +335,9 @@ def screen_participants():
     if "PD" in phenos():
         st.subheader("PD case categories")
         st.caption("Within GP2: early onset is AAO < 50; familial is 2+ individuals "
-                   "with a movement disorder in the same family.")
+                   "with a movement disorder in the same family. De novo is "
+                   "considered within 1 year of disease diagnosis, no prior/current "
+                   "PD treatment, and Hoehn & Yahr <= 2.")
         st.multiselect("Case categories (select all that apply)", CASE_CATEGORIES,
                        key="w_case_categories")
         st.number_input("Estimated % of cases potentially monogenic "
@@ -336,7 +367,7 @@ def screen_participants():
     for p in phenos():
         with st.expander(p, expanded=(p == phenos()[0])):
             crit = st.session_state["criteria"].setdefault(p, {})
-            if p in CASE_PHENOTYPES:
+            if p in CASE_PHENOTYPES and p not in NO_DX_CRITERIA:
                 opts = DX_CRITERIA.get(p, []) + ["Other"]
                 crit["dx_criteria"] = st.selectbox(
                     "Criteria used to confirm the diagnosis", opts,
@@ -369,12 +400,12 @@ def screen_domains():
     if not phenos():
         st.warning("Select phenotypes on screen 2 first.")
         return
-    st.caption(f"Tick a domain to say you collect it, then set it per group: "
-               f"**CS** cross-sectional, once per person · **LT** longitudinal, "
-               f"repeated over time · **{NOT_COLLECTED}** not collected in that "
-               f"group. Untick the whole row if you do not collect it at all.")
-    st.caption("Only the domains most cohorts hold are ticked to begin with, and "
-               "CS/LT follows your study timespan. Change only what differs.")
+    st.markdown(f"Tick a domain to say you collect it, then set it per group: "
+                f"**CS** cross-sectional, once per person · **LT** longitudinal, "
+                f"repeated over time · **{NOT_COLLECTED}** not collected in that "
+                f"group. Untick the whole row if you do not collect it at all.")
+    st.markdown("Only the domains most cohorts hold are ticked to begin with, and "
+                "CS/LT follows your study timespan. Change only what differs.")
 
     # Re-seeding on a timespan change is the one case where the store is
     # deliberately discarded — the PI just told us the whole study is different.
@@ -391,7 +422,7 @@ def screen_domains():
         head = st.columns([3] + [1] * len(ps))
         head[0].caption("")
         for col, p in zip(head[1:], ps):
-            col.caption(f"**{p}**")
+            col.markdown(f"**{p}**")
 
         for _, row in grp.iterrows():
             l1 = row["l1"]
@@ -400,12 +431,11 @@ def screen_domains():
                 st.session_state[on_key] = bool(row.get("default_on", 1))
             cols = st.columns([3] + [1] * len(ps))
 
-            label = l1 + (" ⚠︎" if not row["in_dictionary"] else "")
-            cols[0].checkbox(label, key=on_key)
+            cols[0].checkbox(DOMAIN_LABELS.get(l1, l1), key=on_key)
             on = st.session_state[on_key]
             ex = row.get("examples")
             if isinstance(ex, str) and ex.strip():
-                cols[0].caption(ex if on else f":gray[{ex}]")
+                cols[0].markdown(ex if on else f":gray[{ex}]")
 
             opts = ([NOT_COLLECTED, "CS"] if fixed_design_of(row)
                     else [NOT_COLLECTED, "CS", "LT"])
@@ -423,9 +453,6 @@ def screen_domains():
                     LONG_LABEL.get(st.session_state[key] or NOT_COLLECTED)
                     if on else None)
 
-    st.caption("⚠︎ = no GP2 data dictionary schema yet. We still want to know it "
-               "exists, but it cannot be scheduled for transfer until the "
-               "dictionary covers it.")
     st.text_area("Anything else you collect that is not listed above?",
                  key="w_other_domains", height=70,
                  help="Free text. These become candidates for the GP2 data "
@@ -444,20 +471,20 @@ def screen_samples():
              key="w_dna_local", horizontal=True,
              help="Yes if you hold extracted DNA. No if GP2 would extract it "
                   "from material you send.")
-    c2.selectbox("Source of DNA", DNA_SOURCES, key="w_dna_source")
-    if st.session_state["w_dna_source"] == "Other":
+    c2.multiselect("Source of DNA (select all that apply)", DNA_SOURCES,
+                   key="w_dna_source")
+    if "Other" in st.session_state["w_dna_source"]:
         c2.text_input("Please specify", key="w_dna_source_other")
 
     have_dna = st.session_state["w_dna_local"] == "Yes"
-    src = st.session_state["w_dna_source"]
-    src_sample = DNA_SOURCE_SAMPLE.get(src)
     if have_dna:
         st.caption("Because you hold extracted DNA, the **DNA** row below is what "
                    "GP2 counts as the cohort size.")
     else:
-        label = src_sample or (st.session_state["w_dna_source_other"] or "the source material")
-        st.caption(f"Because DNA will be extracted after transfer, the **{label}** "
-                   f"row below is what GP2 counts as the cohort size.")
+        rows = " and ".join(f"**{x}**" for x in dna_source_samples()) \
+            or "**source material**"
+        st.caption(f"Because DNA will be extracted after transfer, the {rows} "
+                   f"rows below are what GP2 counts as the cohort size.")
 
     st.multiselect("Which biosamples do you have, or plan to collect?",
                    bios.biosample.tolist(), key="w_biosamples")
@@ -523,8 +550,7 @@ def screen_ethics():
     st.radio("Interested in using the GP2 REDCap database for de-identified "
              "clinical data? (optional, under development)", YESNO,
              key="w_redcap", horizontal=True)
-    st.text_area("Free note — any other data types you can provide",
-                 key="w_free_note", height=90)
+    st.text_area("Anything else you want to add?", key="w_free_note", height=90)
 
 
 # --------------------------------------------------------------------------
@@ -583,20 +609,27 @@ def validate() -> tuple[list[str], list[str]]:
         w.append("No ancestry breakdown given.")
     if "Other" in phenos() and not st.session_state["w_other_phenotype"].strip():
         w.append("'Other' phenotype selected but not specified.")
+    if ("Other" in st.session_state["w_followup"]
+            and st.session_state["w_timespan"].startswith("Longitudinal")
+            and not st.session_state["w_followup_other"].strip()):
+        w.append("'Other' follow-up interval selected but not specified.")
     have_dna = st.session_state["w_dna_local"] == "Yes"
     chosen = set(st.session_state["w_biosamples"])
-    src = st.session_state["w_dna_source"]
-    src_sample = DNA_SOURCE_SAMPLE.get(src)
+    srcs = st.session_state["w_dna_source"]
     if have_dna and "DNA" not in chosen:
         e.append("You said extracted DNA is available, but DNA is not in the "
                  "biosample list. Either tick DNA or change that answer.")
     if not have_dna:
-        if src == "Other" and not st.session_state["w_dna_source_other"].strip():
+        if not srcs:
+            e.append("Select the source(s) GP2 would extract DNA from.")
+        if "Other" in srcs and not st.session_state["w_dna_source_other"].strip():
             e.append("DNA source is 'Other' but has not been specified.")
-        elif src_sample and src_sample not in chosen:
-            e.append(f"DNA will be extracted from {src.lower()}, but "
-                     f"'{src_sample}' is not in the biosample list. GP2 cannot "
-                     f"extract from material that is not being transferred.")
+        for src in srcs:
+            src_sample = DNA_SOURCE_SAMPLE.get(src)
+            if src_sample and src_sample not in chosen:
+                e.append(f"DNA will be extracted from {src.lower()}, but "
+                         f"'{src_sample}' is not in the biosample list. GP2 cannot "
+                         f"extract from material that is not being transferred.")
 
     counts = st.session_state.get("counts")
     if counts is None or counts.empty or counts[["Now"]].sum().sum() == 0:
@@ -624,9 +657,9 @@ def build_pdf(long: pd.DataFrame) -> bytes:
     """Screens 1-5 as a document the cohort can sign off and GP2 can file."""
     m = st.session_state
     horizon = int(m["w_year_end"])
-    src = m["w_dna_source"]
-    if src == "Other" and m["w_dna_source_other"].strip():
-        src = f"Other — {m['w_dna_source_other']}"
+    src = ", ".join(f"Other — {m['w_dna_source_other']}"
+                    if x == "Other" and m["w_dna_source_other"].strip() else x
+                    for x in m["w_dna_source"])
     sections = [
         ("1. Study and contact", [report.fields([
             ("Contact", f"{m['w_contact_name']} · {m['w_contact_email']}"),
@@ -640,8 +673,12 @@ def build_pdf(long: pd.DataFrame) -> bytes:
             ("Context", m["w_context"]),
             ("Region / country", f"{m['w_region']} · {m['w_country']}"),
             ("Timespan", m["w_timespan"]),
-            ("Follow-up", ", ".join(m["w_followup"])),
+            ("Follow-up", ", ".join(
+                f"Other — {m['w_followup_other']}"
+                if x == "Other" and m["w_followup_other"].strip() else x
+                for x in m["w_followup"])),
             ("Reference", m["w_doi"]),
+            ("Overlap with other GP2 studies", m["w_gp2_overlap"]),
         ])]),
         ("2. Participants", [report.fields([
             ("Phenotypes", ", ".join(phenos())),
@@ -676,7 +713,7 @@ def build_pdf(long: pd.DataFrame) -> bytes:
         wide = (dom.pivot_table(index="item", columns="phenotype", values="design",
                                 aggfunc="first").fillna(NOT_COLLECTED)
                 .replace({CROSS_SECTIONAL: "CS", LONGITUDINAL: "LT"})
-                .reset_index().rename(columns={"item": "Domain"}))
+                .rename(index=DOMAIN_LABELS).reset_index().rename(columns={"item": "Domain"}))
         sections.append(("3. Clinical and biomarker data", report.frame(wide)))
 
     bio = long[long.kind == "biosample"] if not long.empty else pd.DataFrame()
@@ -701,7 +738,7 @@ def build_pdf(long: pd.DataFrame) -> bytes:
         ("Recontact possible", m["w_recontact"]),
         ("Analytical support requested", m["w_analytic"]),
         ("Interested in GP2 REDCap", m["w_redcap"]),
-        ("Free note", m["w_free_note"]),
+        ("Anything else", m["w_free_note"]),
         ("Other domains collected", m["w_other_domains"]),
     ])]))
     return report.build("GP2 Site Interest Form",
@@ -732,7 +769,8 @@ def screen_review():
         st.subheader("Domain matrix")
         st.dataframe(dom.pivot_table(index="item", columns="phenotype",
                                      values="design", aggfunc="first")
-                     .fillna(NOT_COLLECTED), width="stretch")
+                     .fillna(NOT_COLLECTED).rename(index=DOMAIN_LABELS),
+                     width="stretch")
     if not bio.empty:
         st.subheader("Sample numbers")
         st.dataframe(bio.pivot_table(index="item", columns="phenotype",
