@@ -171,6 +171,20 @@ def test_stage2_every_screen_renders():
     visit_all(run(STAGE2))
 
 
+def test_stage2_domains_missed_in_stage1_can_still_be_added():
+    """Stage 1 suggests, it never decides: a domain it missed must still be
+    plannable with dictionary instruments, and the choice must survive
+    navigation (w_extra_domains in WIDGET_KEYS)."""
+    at = run(STAGE2)
+    at.sidebar.radio[0].set_value("2. What to transfer").run()
+    ms = at.multiselect(key="w_extra_domains")
+    assert ms.options, "no unreported domains offered"
+    ms.set_value([ms.options[0]]).run()
+    at.sidebar.radio[0].set_value("3. CS / LT").run()
+    at.sidebar.radio[0].set_value("2. What to transfer").run()
+    assert at.multiselect(key="w_extra_domains").value == [ms.options[0]]
+
+
 def test_stage2_dictionary_panel_is_developer_only():
     """PIs should not see vocabulary upkeep; maintainers open with ?dev=1."""
     def panel_shown(dev: bool) -> bool:

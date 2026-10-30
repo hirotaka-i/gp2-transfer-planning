@@ -251,7 +251,8 @@ DEFAULT_META = {
     "deadline": date(date.today().year, 12, 31).isoformat(),
 }
 WIDGET_KEYS = ["w_cohort_id", "w_contact_name", "w_contact_email", "w_status",
-               "w_final_year", "w_deadline", "w_phenotypes", "w_samples"]
+               "w_final_year", "w_deadline", "w_phenotypes", "w_samples",
+               "w_extra_domains"]
 
 
 def init_state():
@@ -279,6 +280,7 @@ def init_state():
     st.session_state.setdefault("w_deadline", date.fromisoformat(DEFAULT_META["deadline"]))
     st.session_state.setdefault("w_phenotypes", [])
     st.session_state.setdefault("w_samples", [])
+    st.session_state.setdefault("w_extra_domains", [])
 
 
 def persist_widget_state():
@@ -705,7 +707,7 @@ def validate(long: pd.DataFrame) -> tuple[list[str], list[str]]:
             options = ({g["label"] for g in groups_for(con)}
                        | {u["label"] for u in extra_units() if u["domain"] == con})
             if not (chosen & options):
-                warnings.append(f"Stage 1 reported **{con}** for "
+                warnings.append(f"The site interest form reported **{con}** for "
                                 f"{', '.join(claimed)}, but nothing in this plan "
                                 f"carries it.")
     return errors, warnings
@@ -721,7 +723,7 @@ def screen_cohort():
                "you project year by year — you are not asked to come back and "
                "re-report.")
 
-    up = st.file_uploader("Load the Stage 1 Site Interest submission (JSON)",
+    up = st.file_uploader("Load the site interest form (Stage 1) submission (JSON)",
                           type="json")
     if up is not None and not st.session_state.get("_s1_loaded"):
         s1 = json.load(up)
@@ -745,16 +747,16 @@ def screen_cohort():
                   if str(k).startswith(("inst::", "seg::", "other::"))]:
             del st.session_state[k]
         reset_editors()
-        st.success("Stage 1 loaded. Instruments are pre-selected on screen 2.")
+        st.success("Site interest form loaded. Instruments are pre-selected on screen 2.")
 
     s1 = st.session_state["stage1"]
     if s1:
         n = sum(1 for cells in s1.get("designs", {}).values()
                 if any(v for v in cells.values()))
-        st.info(f"Stage 1 submitted {s1.get('submitted', '?')} — "
+        st.info(f"Site interest form submitted {s1.get('submitted', '?')} — "
                 f"{n} domains reported.")
     else:
-        st.warning("No Stage 1 submission loaded. You can still fill this in from "
+        st.warning("No site interest form loaded. You can still fill this in from "
                    "scratch, but nothing will be pre-selected and the coverage "
                    "check on the review screen will be skipped.")
 
@@ -852,12 +854,13 @@ def screen_instruments():
         reported = [c for c, cells in s1.get("designs", {}).items()
                     if any(v for p, v in cells.items() if p in phenos())]
         st.caption("This table lists the instruments for every domain you said "
-                   "you collect in the site interest form. The ones most cohorts use are already "
-                   "ticked. In the **Transfer** column, tick every instrument whose "
-                   "data you will send to GP2, and untick any you will not.")
+                   "you collect in the site interest form. The ones most cohorts "
+                   "use are already ticked. In the **Transfer** column, tick every "
+                   "instrument whose data you will send to GP2, and untick any you "
+                   "will not.")
     else:
         reported = sorted({c for c, _, _, _, _ in INSTRUMENT_GROUPS})
-        st.caption("No Stage 1 answers, so every domain is shown.")
+        st.caption("No site interest form loaded, so every domain is shown.")
 
     dropped = [c for c in reported if c in NOT_OFFERED_IN_STAGE2]
     reported = [c for c in reported if c not in NOT_OFFERED_IN_STAGE2]
@@ -897,8 +900,47 @@ def screen_instruments():
         r.Instrument for r in edited.itertuples() if r.Transfer)
     st.session_state["_inst_init"] = True
 
+    # Stage 1 suggests, it never decides: a domain missed there can still be
+    # planned with its dictionary instruments, not only as free text.
+    st.subheader("Domains the site interest form did not report")
     remaining = sorted({c for c, _, _, _, _ in INSTRUMENT_GROUPS
                         if c not in reported and c not in NOT_OFFERED_IN_STAGE2})
+    st.caption("If you collected a domain not listed above, please select the "
+               "domain and instrument you used so it may be added to the plan. "
+               "For example, if you collected Schwab & England and it is not "
+               "listed above, select the ADL (Activities of Daily Living) domain "
+               "below and select Schwab & England under Instrument.")
+    st.multiselect("Domains to add", remaining, key="w_extra_domains")
+    added = st.session_state["w_extra_domains"]
+    if added:
+        extra_opts = offered_options(added)
+        sel2 = set(st.session_state["selected"])
+
+        def build2():
+            return pd.DataFrame([{
+                "Domain": ", ".join(o["domains"]), "Instrument": o["label"],
+                "Transfer": o["label"] in sel2, "What it is": o["note"],
+            } for o in extra_opts])
+
+        src2 = editor_source("instruments_extra",
+                             tuple(o["label"] for o in extra_opts), build2)
+        edited2 = st.data_editor(
+            src2, hide_index=True, width="stretch",
+            key=editor_key("instruments_extra"),
+            column_config={
+                "Domain": st.column_config.TextColumn(disabled=True, width="medium"),
+                "Instrument": st.column_config.TextColumn(disabled=True,
+                                                          width="medium"),
+                "Transfer": st.column_config.CheckboxColumn(width="small"),
+                "What it is": st.column_config.TextColumn(disabled=True,
+                                                          width="large"),
+            })
+        for r in edited2.itertuples():
+            if r.Transfer:
+                sel2.add(r.Instrument)
+            else:
+                sel2.discard(r.Instrument)
+        st.session_state["selected"] = sorted(sel2)
 
     # One free-text table for every domain, reported or not, so the cohort is
     # asked "anything else?" once.
@@ -907,7 +949,7 @@ def screen_instruments():
                  [c for c in reported + remaining if c not in NO_OTHER]
                  + [OTHER_DOMAIN],
                  caption="A questionnaire or measure you use that is not in the "
-                         "table above. One domain can include several — add a "
+                         "tables above. One domain can include several — add a "
                          f"row for each. If it fits no GP2 domain, pick "
                          f"**{OTHER_DOMAIN}**.")
 
@@ -917,7 +959,7 @@ def screen_instruments():
     c2.metric("Domains covered", len({c for m in chosen
                                       for c in unit_constructs_of(m)}))
     if dropped:
-        st.caption("Reported in Stage 1 but not planned here: "
+        st.caption("Reported in the site interest form but not planned here: "
                    + ", ".join(dropped) + ".")
 
     missing, unreachable = vocab_check(l2) if dev_mode() else ([], [])
@@ -944,11 +986,12 @@ def screen_design():
         return
 
     if st.session_state["stage1"]:
-        st.caption("Inherited from your site interest form answers — an instrument serving a "
-                   "longitudinal domain arrives as **LT**. Change anything that "
+        st.caption("Inherited from your site interest form answers — an "
+                   "instrument serving a longitudinal domain arrives as **LT**. Change anything that "
                    "differs at instrument level.")
     else:
-        st.caption("No site interest form answers to inherit, so everything starts at **CS**.")
+        st.caption("No site interest form answers to inherit, so everything "
+                   "starts at **CS**.")
     st.caption(f"**{NOT_COLLECTED}** not collected in that group · **CS** once per "
                f"person · **LT** repeated over time.")
 
@@ -981,8 +1024,8 @@ def screen_dna():
     st.caption("DNA defines the cohort size everything else is measured against. "
                "One row per participant — no repeats.")
     if why:
-        st.info(f"Site interest form says {why}, so these numbers start from your **{basis}** "
-                f"counts. Enter the participants who will end up with usable DNA — "
+        st.info(f"The site interest form says {why}, so these numbers start "
+                f"from your **{basis}** counts. Enter the participants who will end up with usable DNA — "
                 f"that may be fewer than the samples shipped.")
     if not phenos():
         st.warning("Select phenotypes on screen 1 first.")
@@ -1144,7 +1187,7 @@ def dna_basis() -> tuple[str, str]:
 
 
 def stage1_samples() -> pd.DataFrame:
-    """Site interest form's biosample estimates, as (phenotype, item, now, horizon)."""
+    """Stage 1's biosample estimates, as (phenotype, item, now, horizon)."""
     s1 = st.session_state["stage1"]
     if not s1:
         return pd.DataFrame()
@@ -1153,9 +1196,9 @@ def stage1_samples() -> pd.DataFrame:
 
 
 def reconcile(long: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
-    """Compare the firm plan against what site interest form estimated.
+    """Compare the firm plan against what Stage 1 estimated.
 
-    Differences are expected — Site interest form is an estimate made before any agreement,
+    Differences are expected — Stage 1 is an estimate made before any agreement,
     often months earlier and sometimes by someone else. Nothing here blocks
     submission. The point is that GP2 can see where a cohort's offer moved, and
     in which direction, which is invisible today because the two live in
@@ -1185,16 +1228,17 @@ def reconcile(long: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
                 continue
             flag = ""
             if hor is None:
-                flag = "not offered at Stage 1"
+                flag = "not in the site interest form"
             elif got == 0:
                 flag = "estimated, not in this plan"
             elif now is not None and got < now:
-                flag = f"below what already existed at Stage 1 ({now})"
+                flag = f"below what already existed per the site interest form ({now})"
             elif abs(got - hor) > max(10, 0.1 * hor):
                 flag = "up" if got > hor else "down"
             rows.append({"Phenotype": pheno, "Sample": item,
-                         "Stage 1 now": now, "Stage 1 projected": hor,
-                         "Stage 2 planned": got, "Flag": flag})
+                         "Site interest form: now": now,
+                         "Site interest form: projected": hor,
+                         "Planned": got, "Flag": flag})
 
     # --- design: a domain reported longitudinal that arrives cross-sectional
     for con, cells in s1.get("designs", {}).items():
@@ -1217,9 +1261,9 @@ def reconcile(long: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     added = sorted({m for m in selected_instruments()
                     if not (set(unit_constructs_of(m)) & reported)})
     if added:
-        notes.append("Planned but not reported in the site interest form: " + ", ".join(added)
-                     + ". Not a problem — Site interest form is an estimate — but worth a "
-                       "look if it was unintended.")
+        notes.append("Planned but not reported in the site interest form: "
+                     + ", ".join(added) + ". Not a problem — the site interest "
+                     "form is an estimate — but worth a look if it was unintended.")
 
     # --- phenotypes
     s1_ph = set(s1.get("study", {}).get("w_phenotypes", []))
@@ -1227,10 +1271,12 @@ def reconcile(long: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
         extra = ps - s1_ph
         gone = s1_ph - ps
         if extra:
-            notes.append("Phenotypes in this agreement that site interest form did not list: "
+            notes.append("Phenotypes in this agreement that the site interest "
+                         "form did not list: "
                          + ", ".join(sorted(extra)) + ".")
         if gone:
-            notes.append("Phenotypes reported in the site interest form but not covered here: "
+            notes.append("Phenotypes reported in the site interest form but not "
+                         "covered here: "
                          + ", ".join(sorted(gone)) + ".")
     return pd.DataFrame(rows), notes
 
@@ -1249,7 +1295,7 @@ def build_pdf(long: pd.DataFrame) -> bytes:
             ("Status", m["study_status"]),
             ("Deadline", m["deadline"]),
             ("Projected years", ", ".join(str(y) for y in years) or "single transfer"),
-            ("Stage 1 submitted", (s1 or {}).get("submitted", "not loaded")),
+            ("Site interest form submitted", (s1 or {}).get("submitted", "not loaded")),
             ("Cohort size counted on", f"{basis}" + (f" — {why}" if why else "")),
         ])]),
     ]
@@ -1285,13 +1331,13 @@ def build_pdf(long: pd.DataFrame) -> bytes:
 
     table, notes = reconcile(long)
     if s1:
-        content = [Paragraph2("Site interest form was an estimate made before any agreement, "
-                              "so these are not expected to match exactly.")]
+        content = [Paragraph2("The site interest form was an estimate made "
+                              "before any agreement, so these are not expected to match exactly.")]
         if not table.empty:
             content += report.frame(table)
         for n in notes:
             content.append(Paragraph2(n.replace("**", "")))
-        sections.append(("Reconciliation with Site Interest Form", content))
+        sections.append(("Reconciliation with the site interest form", content))
     return report.build("GP2 Data & Sample Transfer Plan",
                         report.stamp(m["cohort_id"]), sections)
 
@@ -1336,9 +1382,9 @@ def screen_review():
 
     table, notes = reconcile(long)
     if st.session_state["stage1"]:
-        st.subheader("Reconciliation with Site Interest Form")
-        st.caption("Site interest form was an estimate made before any agreement, so these "
-                   "will not match exactly and are not expected to. Nothing here "
+        st.subheader("Reconciliation with the site interest form")
+        st.caption("The site interest form was an estimate made before any "
+                   "agreement, so these will not match exactly and are not expected to. Nothing here "
                    "blocks submission — it is here so the change is visible.")
         if not table.empty:
             flagged = int((table.Flag != "").sum())
@@ -1348,7 +1394,7 @@ def screen_review():
         for n in notes:
             st.info(n)
         if table.empty and not notes:
-            st.success("The plan matches what Stage 1 reported.")
+            st.success("The plan matches what the site interest form reported.")
 
     st.subheader("What gets stored")
     st.caption("This is the information that we will be tracking about your "
@@ -1393,7 +1439,7 @@ DEMO_DNA = {"PD": (300, [200, 100, 0]), "Control": (300, [0, 0, 0]),
 
 
 def load_demo():
-    """A cohort that already submitted site interest form, so inheritance is visible."""
+    """A cohort that already submitted Stage 1, so inheritance is visible."""
     st.session_state["stage1"] = {
         "submitted": date.today().isoformat(),
         "designs": {
@@ -1421,7 +1467,7 @@ def load_demo():
         "w_contact_email": "a.example@institution.edu", "w_status": "Ongoing",
         "w_final_year": date.today().year + 2,
         "w_phenotypes": ["PD", "Control", "Prodromal"],
-        "w_samples": ["blood", "plasma", "CSF"],
+        "w_samples": ["blood", "plasma", "CSF"], "w_extra_domains": [],
     })
     st.session_state["designs"] = {}
     st.session_state["selected"] = []
@@ -1451,9 +1497,9 @@ def sidebar():
     if dev_mode():
         st.sidebar.caption("Developer mode on.")
     st.sidebar.divider()
-    st.sidebar.caption("Site interest form suggests instruments; it never decides them. The "
-                       "review screen reconciles this plan against what site interest form "
-                       "estimated.")
+    st.sidebar.caption("The site interest form suggests instruments; it never "
+                       "decides them. The review screen reconciles this plan "
+                       "against what the site interest form estimated.")
     return step
 
 
