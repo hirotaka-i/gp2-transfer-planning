@@ -163,8 +163,8 @@ reaches the export.
 - `CBD-Armstrong` and `CBS-Armstrong` both exist in the dictionary and are
   treated as one option. `PSP-RS` exists alongside `PSP-RS part I`–`VI`.
 - CT, MRI and PET are asked at Stage 1 but have no dictionary schema, so they
-  cannot be planned at Stage 2. They carry a ⚠︎ and appear in
-  `NOT_OFFERED_IN_STAGE2`.
+  cannot be planned at Stage 2. Stage 1's review screen warns about them, and
+  they appear in `NOT_OFFERED_IN_STAGE2`.
 
 ---
 

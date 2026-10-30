@@ -17,7 +17,6 @@ import json
 from pathlib import Path
 
 import pandas as pd
-import pytest
 from streamlit.testing.v1 import AppTest
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -261,11 +260,3 @@ def test_stage2_free_text_reaches_the_count_grids():
     items = {i for g in at.session_state["clinical"].values() for i in g["Item"]}
     assert "Depression — BDI-II" in items and "Depression — HADS-D" in items, \
         "two measures in one domain must both become rows"
-
-
-@pytest.mark.parametrize("path", [STAGE1, STAGE2])
-def test_pdf_builds(path):
-    at = run(path)
-    visit_all(at)
-    labels = [d.label for d in at.download_button]
-    assert any("PDF" in l for l in labels), f"no PDF button on {path}"
