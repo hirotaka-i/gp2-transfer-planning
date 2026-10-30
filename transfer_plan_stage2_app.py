@@ -909,7 +909,7 @@ def screen_instruments():
                "domain and instrument you used so it may be added to the plan. "
                "For example, if you collected Schwab & England and it is not "
                "listed above, select the ADL (Activities of Daily Living) domain "
-               "below and select Schwab & England under Instrument.")
+               "below and tick Schwab & England in the **Transfer** column.")
     st.multiselect("Domains to add", remaining, key="w_extra_domains")
     added = st.session_state["w_extra_domains"]
     if added:

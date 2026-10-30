@@ -1,0 +1,4 @@
+# Modalities INSTRUMENT_GROUPS names before the data dictionary has them.
+# One per line. Delete a line once the dictionary adds that modality.
+# Mortality: GP2 will split it out of PD History.
+Mortality
